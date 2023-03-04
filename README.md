@@ -1,2 +1,2 @@
 # Minecraft-project-site
-Site for simple minecraft project, with Account, News, and Server monitoring
+Site and Launcher for simple minecraft project, with Account, News, and Server monitoring
