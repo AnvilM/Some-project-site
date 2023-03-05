@@ -1,2 +1,2 @@
-# Minecraft-project-site
-Simple site for minecraft project, with Account, News, and Servers status monitoring
+# Some-project-site
+Simple site for some project, with Account, News, and Servers status monitoring
