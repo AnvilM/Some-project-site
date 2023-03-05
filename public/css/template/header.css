@@ -1,0 +1,16 @@
+#root > .header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#root > .header > .nav-bar {
+    display: flex;
+    flex-direction: row;
+
+}
+
+#root > .header > .nav-bar > .button{
+   
+    margin-left: 10px;
+}

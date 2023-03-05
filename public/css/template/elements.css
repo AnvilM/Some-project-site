@@ -1,0 +1,52 @@
+/* Main elements */
+.interactive-element{
+    background-color: var(--interactive-color);
+    cursor: pointer;
+
+    transition: .1s ease-out background-color;
+}
+
+.interactive-element:hover{
+    background-color: var(--active-color);
+}
+
+.link > a{
+    color: var(--interactive-color);
+
+}
+
+.link > a:hover{
+    color: var(--active-color);
+
+}
+
+/* Text elements */
+
+.logo{
+    font-size: 29px;
+    font-weight: 500;
+}
+
+.headline{
+    padding: 10px 0;
+
+    font-size: 23px;
+    font-weight: 500;
+}
+
+
+/* other */
+
+
+
+
+.button{
+    padding: 10px 20px;
+    border-radius: 10px;
+    
+    display: flex;
+    align-items: center;
+}
+
+
+

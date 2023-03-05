@@ -14,6 +14,7 @@ class View{
         $view = 'src/views/'.$this->params['Controller'].'/'.$this->params['View'].'.php';
         if(file_exists($view)){
             $title = $this->params['Title'];
+            $page = '/public/css/'.$this->params['Controller'].'/'.$this->params['View'].'.css';
 
             ob_start();
             require $view;

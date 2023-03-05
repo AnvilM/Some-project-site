@@ -1,0 +1,48 @@
+*{
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+body{
+
+    margin: 0;
+    background: var(--background);
+    
+    display: flex;
+    justify-content: space-around;
+
+    cursor: default;
+}
+
+
+#root{
+
+    padding: 50px 10px;
+    
+    width: 100%;
+    min-width: 300px;
+    max-width: 1024px;
+
+
+}
+
+
+.main-content{
+    margin: 50px 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

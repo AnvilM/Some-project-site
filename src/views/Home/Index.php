@@ -1,3 +1,3 @@
-<div class="app">
- Main
+<div class="start">
+
 </div>
