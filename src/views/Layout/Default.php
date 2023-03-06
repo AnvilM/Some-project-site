@@ -18,15 +18,21 @@
         <link rel="stylesheet" href="/public/css/template/header.css">
         <link rel="stylesheet" href="/public/css/template/footer.css">
         
-        <link rel="stylesheet" href="<?=$page?>">
+        <?=$css?>
+        
         <title><?= $title ?></title>
     </head>
     <body>
         <div class="root" id="root">
             <div class="header">
-                <div class="logo">YUKKA</div>
+                <a href="/" class="logo" >
+                    <div class="icon">
+                        <img src="/public/icons/logo.svg" alt="">
+                    </div>
+                    <div class="title">YUKKA</div>
+                </a>
                 <div class="nav-bar">
-                    <? foreach($vars['nav-bar'] as $element){
+                    <? foreach($vars['navBar'] as $element){
                         echo $element;
                     } ?>
                     
@@ -49,11 +55,10 @@
                 <div class="papers">
                     <div class="headline">Документы</div>
                     <div class="content">
-                        <div class="link"><a href="/">Договор-оферта</a> </div>
-                        <div class="link"><a href="/">Политика обработки персональных данных</a></div>
-                        <div class="link"><a href="/">Порядок проведения оплаты и безопасность операций</a></div>
-                        
-                       
+                        <a href="/" class="link">Договор-оферта</a>
+                        <a href="/" class="link">Политика обработки персональных данных</a>
+                        <a href="/" class="link">Порядок проведения оплаты и безопасность операций</a>
+            
                     </div>
                 </div>
                 <div class="contact">
@@ -66,7 +71,8 @@
                 </div>
             </div>
         </div>
-        
+        <script src="/public/js/script.js"></script>
+        <?=$js?>
     </body>
     
     

@@ -8,8 +8,8 @@ use src\core\Controller;
 Class AccountController extends Controller{
 
     public function LoginAction(){
-        echo 'Login page';
         
+        $this->view->render();
     }
     public function SignupAction(){
         echo 'Signup page';

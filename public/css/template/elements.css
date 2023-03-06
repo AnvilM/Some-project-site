@@ -10,22 +10,19 @@
     background-color: var(--active-color);
 }
 
-.link > a{
+
+.link{
     color: var(--interactive-color);
 
 }
 
-.link > a:hover{
+.link:hover{
     color: var(--active-color);
 
 }
 
 /* Text elements */
 
-.logo{
-    font-size: 29px;
-    font-weight: 500;
-}
 
 .headline{
     padding: 10px 0;
@@ -43,7 +40,7 @@
 .button{
     padding: 10px 20px;
     border-radius: 10px;
-    
+    max-height: 40px;
     display: flex;
     align-items: center;
 }

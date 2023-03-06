@@ -16,8 +16,14 @@ body{
 
     cursor: default;
 }
+img{
+    width: 100%;
+    height: auto;
+}
 
-
+a{
+    display: block;
+}
 #root{
 
     padding: 50px 10px;

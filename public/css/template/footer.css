@@ -15,7 +15,7 @@
     width: 30%;
     
 }
-#root > .footer > * > .content > div{
+#root > .footer > * > .content > *{
     margin-bottom: 20px;
 
     
