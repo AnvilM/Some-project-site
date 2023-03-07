@@ -34,3 +34,22 @@
    
     margin-left: 10px;
 }
+#root > .header > .nav-bar > .account{
+    display: flex;
+    justify-content: space-between;
+    border-left: none;
+    padding: 5px 0px;
+    
+}
+#root > .header > .nav-bar > .account > img{
+    border-radius: 10px;
+    height: 42px
+    
+    
+    
+}
+
+#root > .header > .nav-bar > .account > .login{
+    padding: 0 20px;
+    
+}

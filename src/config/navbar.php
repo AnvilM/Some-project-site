@@ -10,7 +10,10 @@ return[
         
         ],
         'isLogined' => [
-            '<a href="/" class="account"><img src="https://minotar.net/avatar/Anvil" alt=""></a>'
+            '<a href="/" class="account button interactive-element_2">
+            <img src="https://minotar.net/avatar/'.$_SESSION['Login'].'" alt="">
+            <div class="login">'.$_SESSION['Login'].'</div>
+            </a>'
         ],
         'admin' => [
             
