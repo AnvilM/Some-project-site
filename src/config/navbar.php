@@ -10,7 +10,7 @@ return[
         
         ],
         'isLogined' => [
-            '<a href="/" class="button interactive-element">Аккаунт</a>'
+            '<a href="/" class="account"><img src="https://minotar.net/avatar/Anvil" alt=""></a>'
         ],
         'admin' => [
             
