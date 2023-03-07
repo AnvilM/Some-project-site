@@ -3,8 +3,7 @@
 return [
     'all' => [
         '',
-        'Account/Signup',
-        'Account/Login',
+        
     ],
     'noLogined' => [
         'Account/Signup',
@@ -12,9 +11,9 @@ return [
         
     ],
     'isLogined' => [
-        
+        'Account'
     ],
     'admin' => [
-
+        'Admin'
     ]
 ];

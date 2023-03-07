@@ -6,13 +6,22 @@ namespace src\controllers;
 use src\core\Controller;
 
 Class AccountController extends Controller{
-
+    public function IndexAction(){
+        
+        $this->view->render();
+    }
     public function LoginAction(){
-        $_SESSION['Login'] = 'Pebir';
+        if(isset($_POST['login']) && isset($_POST['password'])){
+            //Запрос к бд и установка сессии и всей остальной херни
+        }
+        
         $this->view->render();
     }
     public function SignupAction(){
-        unset($_SESSION['Login']);
-        echo 'Signup page';
+        if(isset($_POST['login']) && isset($_POST['password'])){
+            //Отправка кода подтверждения и переход на страницу подтверждения
+        }
+
+        $this->view->render();
     }
 } 

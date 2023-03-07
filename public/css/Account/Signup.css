@@ -1,0 +1,17 @@
+.main-content > .content{
+    display: flex;
+    justify-content: space-around;
+}
+
+.form > .content > input{
+    width: 80%;
+}
+
+
+
+
+
+
+
+
+

@@ -34,6 +34,14 @@ $routes = [
         'View' => 'Error404',
         'Title' => 'Ошибка'
     ],
+    [
+        'Route' => 'Account',
+        'Controller' => 'Account',
+        'Action' => 'Index',
+        'Layout' => 'Default',
+        'View' => 'Index',
+        'Title' => 'Аккаунт'
+    ],
     
 ];
 

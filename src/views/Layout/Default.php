@@ -12,9 +12,8 @@
 
         <!-- CSS -->
         <link rel="stylesheet" href="/public/css/template/variables.css">
-        <link rel="stylesheet" href="/public/css/template/elements.css">
-
         <link rel="stylesheet" href="/public/css/template/main.css">
+        <link rel="stylesheet" href="/public/css/template/elements.css">
         <link rel="stylesheet" href="/public/css/template/header.css">
         <link rel="stylesheet" href="/public/css/template/footer.css">
         
