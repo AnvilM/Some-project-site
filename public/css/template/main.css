@@ -1,3 +1,4 @@
+/* main */
 *{
     color: #fff;
     font-family: 'Roboto', sans-serif;
@@ -35,7 +36,6 @@ input, button{
     outline: none;
 }
 
-
 #root{
 
     padding: 50px 10px;
@@ -46,6 +46,112 @@ input, button{
 
 
 }
+
+/* form */
+.form{
+    border-radius: 10px;
+    width: 350px;
+    border: 1px #3f3f4e solid;
+    
+}
+
+.form > .title{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    font-size: 29px;
+    font-weight: 500;
+    
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px #3f3f4e solid;
+}
+
+.form > .footer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    
+    padding: 10px 0;
+    width: 100%;
+    height: 60px;
+    border-top: 1px #3f3f4e solid;
+}
+
+.form > .content{
+    margin: 40px 10px;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+.form > .content > .button{
+    padding: 20px 40px;
+
+    margin-top: 40px;
+    border-radius: 6px;
+}
+
+input{
+    background: transparent;
+
+    border-bottom: 2px #3f3f4e solid;
+    text-align: center;
+
+    transition: .1s ease-out;
+    padding: 0 0 5px 0;
+}
+
+input:focus{
+    border-color: var(--active-color);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0px 1000px #00000000 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input + input{
+    margin-top: 40px;
+}
+
+input.login{
+    background: url(/public/icons/login-icon.svg) no-repeat;
+    background-size: 24px;
+    
+}
+input.login:focus{
+    
+    background-position-x: -24px;
+}
+
+input.password{
+    background: url(/public/icons/password-icon.svg) no-repeat;
+    background-size: 24px;
+}
+input.password:focus{
+    background-position-x: -24px;
+}
+
+
+
+
+
+
+
+
 
 
 .main-content{

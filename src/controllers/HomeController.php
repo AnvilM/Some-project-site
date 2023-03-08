@@ -10,7 +10,8 @@ Class HomeController extends Controller{
 
     public function IndexAction(){
         
-        
+
         $this->view->render();
     }   
+
 } 

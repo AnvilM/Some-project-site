@@ -41,89 +41,9 @@
 }
 
 /* form */
-.form{
-    border-radius: 10px;
-    width: 350px;
-    border: 1px #3f3f4e solid;
-    
-}
-
-.form > .title{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-    font-size: 29px;
-    font-weight: 500;
-    
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px #3f3f4e solid;
-}
-
-.form > .footer{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-    
-    padding: 10px 0;
-    width: 100%;
-    height: 60px;
-    border-top: 1px #3f3f4e solid;
-}
-
-.form > .content{
-    margin: 40px 10px;
-
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-}
-
-input{
-    background: transparent;
-
-    border-bottom: 2px #3f3f4e solid;
-    text-align: center;
-
-    transition: .1s ease-out;
-    padding: 0 0 5px 0;
-}
-
-input:focus{
-    border-color: var(--active-color);
-}
 
 
-input + input{
-    margin-top: 40px;
-}
 
-input.login{
-    background: url(/public/icons/login-icon.svg) no-repeat;
-    background-size: 24px;
-    
-}
-input.login:focus{
-    
-    background-position-x: -24px;
-}
-
-input.password{
-    background: url(/public/icons/password-icon.svg) no-repeat;
-    background-size: 24px;
-}
-input.password:focus{
-    background-position-x: -24px;
-}
-
-
-.form > .content > button{
-    margin-top: 40px;
-    border-radius: 6px;
-}
 
 /* other */
 
