@@ -13,9 +13,8 @@ Class AccountController extends Controller{
     public function LoginAction(){
         if(isset($_GET['code'])){
             $this->DiscordAuth();
-            
-            
         }
+
         if(isset($_POST['login']) && isset($_POST['password'])){
             $_SESSION['Login'] = $_POST['login'];
             header('Location: /');
@@ -26,6 +25,27 @@ Class AccountController extends Controller{
         
         $this->view->render();
     }
+
+
+    public function SignupAction(){
+        if(isset($_POST['login']) && isset($_POST['password'])){
+            $_SESSION['Login'] = $_POST['login'];
+            header('Location: /');
+
+
+            //Отправка кода подтверждения и переход на страницу подтверждения
+        }
+
+        $this->view->render();
+    }
+
+    public function LogoutAction(){
+        unset($_SESSION['Login']);
+        header('Location: /');
+        exit();
+    }
+
+
 
     private function DiscordAuth(){
         $discord = require $_SERVER['DOCUMENT_ROOT'].'/src/config/discord.php';
@@ -71,17 +91,5 @@ Class AccountController extends Controller{
             $_SESSION['Login'] = $response['username'].'#'.$response['discriminator'];
             header('Location: /');
             exit();
-    }
-
-    public function SignupAction(){
-        if(isset($_POST['login']) && isset($_POST['password'])){
-            $_SESSION['Login'] = $_POST['login'];
-            header('Location: /');
-
-
-            //Отправка кода подтверждения и переход на страницу подтверждения
-        }
-
-        $this->view->render();
     }
 } 

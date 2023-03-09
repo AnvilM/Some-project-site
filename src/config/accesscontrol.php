@@ -2,7 +2,7 @@
 
 return [
     'all' => [
-        '',
+        ''
         
     ],
     'noLogined' => [
@@ -11,7 +11,8 @@ return [
         
     ],
     'isLogined' => [
-        'Account'
+        'Account',
+        'Account/Logout',
     ],
     'admin' => [
         'Admin'

@@ -21,6 +21,7 @@ return[
             
         ]
     ],
+
     'Account/Login' => [
         'all' => [
             '<a href="/account/Signup" class="button interactive-element">Регистрация</a>',
@@ -36,6 +37,7 @@ return[
     
         ]
     ],
+
     'Account/Signup' => [
         'all' => [
             '<a href="/account/login" class="button interactive-element">Вход</a>',
@@ -50,5 +52,21 @@ return[
         'admin' => [
     
         ]
-    ]
+    ],
+
+    'Account' => [
+        'all' => [
+            '<a href="/account/logout" class="button interactive-element">Выйти</a>',
+        ],
+        'noLogined' => [        
+           
+        ],
+        'isLogined' => [
+            
+        ],
+        'admin' => [
+            
+        ]
+    ],
+
 ];
