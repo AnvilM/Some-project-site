@@ -12,14 +12,29 @@ Class AccountController extends Controller{
     }
     public function LoginAction(){
         if(isset($_GET['code'])){
+            $this->DiscordAuth();
             
             
+        }
+        if(isset($_POST['login']) && isset($_POST['password'])){
+            $_SESSION['Login'] = $_POST['login'];
+            header('Location: /');
+
+            
+            //Запрос к бд и установка сессии и всей остальной херни
+        }
+        
+        $this->view->render();
+    }
+
+    private function DiscordAuth(){
+        $discord = require $_SERVER['DOCUMENT_ROOT'].'/src/config/discord.php';
             $data = [
-                'client_id' => '1006565061214621808',
-                'client_secret' => 'WYbuvoDs1O1i_hnxw8wvgksvE6_c7YxA',
+                'client_id' => $discord['client_id'],
+                'client_secret' => $discord['client_secret'],
                 'grant_type' => 'authorization_code',
                 'code' => $_GET['code'],
-                'redirect_uri' => 'http://localhost/account/login',
+                'redirect_uri' => $discord['redirect_uri'],
                 'scope' => 'identify%20guids',
             ]; 
 
@@ -53,21 +68,11 @@ Class AccountController extends Controller{
             
             $response = json_decode(curl_exec($ch), true);
 
-            $_SESSION["Login"] = $response['username'];
+            $_SESSION['Login'] = $response['username'].'#'.$response['discriminator'];
             header('Location: /');
             exit();
-            
-        }
-        if(isset($_POST['login']) && isset($_POST['password'])){
-            $_SESSION['Login'] = $_POST['login'];
-            header('Location: /');
-
-            
-            //Запрос к бд и установка сессии и всей остальной херни
-        }
-        
-        $this->view->render();
     }
+
     public function SignupAction(){
         if(isset($_POST['login']) && isset($_POST['password'])){
             $_SESSION['Login'] = $_POST['login'];
