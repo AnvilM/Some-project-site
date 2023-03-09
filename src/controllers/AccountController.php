@@ -16,11 +16,24 @@ Class AccountController extends Controller{
         if(isset($_GET['code'])){
             $DiscordLogin = $this->DiscordAuth();
             
+            if(mysqli_num_rows($this->model->getLogin($DiscordLogin)) <= 0){
+                $this->model->AddUser($DiscordLogin, NULL, NULL, time());
+                $_SESSION['Login'] = $DiscordLogin;
+                header('Location: /');
+                exit();
+            }
+            else{
+                $this->SetMessage('Логин занят');
+                header('Location: /');
+                exit();
+            }
+            
+            
         }
 
         if(isset($_POST['Login']) && isset($_POST['Password'])){
 
-            if(mysqli_num_rows($this->model->getUser($_POST['Login'], $_POST['Password'])) >= 1){
+            if(mysqli_num_rows($this->model->getUser($_POST['Login'], hash('sha256', $_POST['Password']))) >= 1){
                 $_SESSION['Login'] = $_POST['Login'];
                 header('Location: /');
                 exit();
@@ -30,34 +43,7 @@ Class AccountController extends Controller{
             }
 
 
-            if(isset($_POST['Login']) && isset($_POST['Password']) && isset($_POST['Email']) && isset($_POST['Password_2'])){
-                
-            
-                if(strlen($_POST['Login']) >= 3 && strlen($_POST['Login']) <= 16 && mb_substr($_POST['Login'], 0, 0) != '-' && $_POST['Password'] == $_POST['Password_2'] && strlen($_POST['Password']) >= 8){
-                    if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) < 1){
-                        if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) < 1){
-                            $this->model->AddUser($_POST['Login'], $_POST['Password'], $_POST['Email'], time());
-                            $_SESSION['Login'] = $_POST['Login'];
-                            header('Location: /');
-                        }
-                        else{
-                            $this->SetMessage('Почта уже зарегестрированна');
-                        }
-                    }
-                    else{
-                        $this->SetMessage('Логин занят');
-                    }
-                }
-                else{
-                    $this->SetMessage('Поле заполненно неверно');
-                }
-    
-    
-                //Отправка кода подтверждения и переход на страницу подтверждения
-            }
-
-            
-            //Запрос к бд и установка сессии и всей остальной херни
+        
         }
         
         $this->view->render();
@@ -71,7 +57,7 @@ Class AccountController extends Controller{
             if(strlen($_POST['Login']) >= 3 && strlen($_POST['Login']) <= 16 && mb_substr($_POST['Login'], 0, 0) != '-' && $_POST['Password'] == $_POST['Password_2'] && strlen($_POST['Password']) >= 8){
                 if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) < 1){
                     if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) < 1){
-                        $this->model->AddUser($_POST['Login'], $_POST['Password'], $_POST['Email'], time());
+                        $this->model->AddUser($_POST['Login'], hash('sha256', $_POST['Password']), $_POST['Email'], time());
                         $_SESSION['Login'] = $_POST['Login'];
                         header('Location: /');
                     }
@@ -146,8 +132,8 @@ Class AccountController extends Controller{
             
             $response = json_decode(curl_exec($ch), true);
 
-            $_SESSION['Login'] = $response['username'];
-            return $_SESSION['Login'];
+        
+            return $response['username'];
     }
 
 } 
