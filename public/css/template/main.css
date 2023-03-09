@@ -47,6 +47,7 @@ input, button{
 
 }
 
+
 /* form */
 .form{
     border-radius: 10px;
@@ -142,6 +143,14 @@ input.password{
     background-size: 24px;
 }
 input.password:focus{
+    background-position-x: -24px;
+}
+
+input.email{
+    background: url(/public/icons/mail-icon.svg) no-repeat;
+    background-size: 24px;
+}
+input.email:focus{
     background-position-x: -24px;
 }
 

@@ -22,7 +22,16 @@ abstract class Controller{
         $this->view = new View($params);
         
         $this->model = $this->loadModel($params['Controller']);
+
+
+        
     }
+
+    public function SetMessage($message){
+        $_SESSION['Message'] = $message;
+    }
+
+    
 
     public function loadModel($model_name){
         $model_path = 'src\models\\'.$model_name.'Model';

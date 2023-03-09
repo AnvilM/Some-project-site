@@ -13,6 +13,8 @@ return [
     'isLogined' => [
         'Account',
         'Account/Logout',
+        'Account/Settings',
+        'Account/Sessions',
     ],
     'admin' => [
         'Admin'

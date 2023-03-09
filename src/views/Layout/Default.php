@@ -22,6 +22,7 @@
         <title><?= $title ?></title>
     </head>
     <body>
+        
         <div class="root" id="root">
             <div class="header">
                 <a href="/" class="logo" >

@@ -43,6 +43,22 @@ $routes = [
         'Title' => 'Аккаунт'
     ],
     [
+        'Route' => 'Account/Settings',
+        'Controller' => 'Account',
+        'Action' => 'Settings',
+        'Layout' => 'Default',
+        'View' => 'Settings',
+        'Title' => 'Аккаунт'
+    ],
+    [
+        'Route' => 'Account/Sessions',
+        'Controller' => 'Account',
+        'Action' => 'Sessions',
+        'Layout' => 'Default',
+        'View' => 'Sessions',
+        'Title' => 'Аккаунт'
+    ],
+    [
         'Route' => 'Error/404',
         'Controller' => 'Error',
         'Action' => 'Error404',

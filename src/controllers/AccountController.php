@@ -7,17 +7,54 @@ use src\core\Controller;
 
 Class AccountController extends Controller{
     public function IndexAction(){
-        
+
+
         $this->view->render();
     }
     public function LoginAction(){
+
         if(isset($_GET['code'])){
-            $this->DiscordAuth();
+            $DiscordLogin = $this->DiscordAuth();
+            
         }
 
-        if(isset($_POST['login']) && isset($_POST['password'])){
-            $_SESSION['Login'] = $_POST['login'];
-            header('Location: /');
+        if(isset($_POST['Login']) && isset($_POST['Password'])){
+
+            if(mysqli_num_rows($this->model->getUser($_POST['Login'], $_POST['Password'])) >= 1){
+                $_SESSION['Login'] = $_POST['Login'];
+                header('Location: /');
+                exit();
+            }
+            else{
+                $this->SetMessage('Неверный логин или пароль');
+            }
+
+
+            if(isset($_POST['Login']) && isset($_POST['Password']) && isset($_POST['Email']) && isset($_POST['Password_2'])){
+                
+            
+                if(strlen($_POST['Login']) >= 3 && strlen($_POST['Login']) <= 16 && mb_substr($_POST['Login'], 0, 0) != '-' && $_POST['Password'] == $_POST['Password_2'] && strlen($_POST['Password']) >= 8){
+                    if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) < 1){
+                        if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) < 1){
+                            $this->model->AddUser($_POST['Login'], $_POST['Password'], $_POST['Email'], time());
+                            $_SESSION['Login'] = $_POST['Login'];
+                            header('Location: /');
+                        }
+                        else{
+                            $this->SetMessage('Почта уже зарегестрированна');
+                        }
+                    }
+                    else{
+                        $this->SetMessage('Логин занят');
+                    }
+                }
+                else{
+                    $this->SetMessage('Поле заполненно неверно');
+                }
+    
+    
+                //Отправка кода подтверждения и переход на страницу подтверждения
+            }
 
             
             //Запрос к бд и установка сессии и всей остальной херни
@@ -28,9 +65,24 @@ Class AccountController extends Controller{
 
 
     public function SignupAction(){
-        if(isset($_POST['login']) && isset($_POST['password'])){
-            $_SESSION['Login'] = $_POST['login'];
-            header('Location: /');
+        if(isset($_POST['Login']) && isset($_POST['Password']) && isset($_POST['Email']) && isset($_POST['Password_2'])){
+        
+            
+            if(strlen($_POST['Login']) >= 3 && strlen($_POST['Login']) <= 16 && mb_substr($_POST['Login'], 0, 0) != '-' && $_POST['Password'] == $_POST['Password_2'] && strlen($_POST['Password']) >= 8){
+                if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) < 1){
+                    if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) < 1){
+                        $this->model->AddUser($_POST['Login'], $_POST['Password'], $_POST['Email'], time());
+                        $_SESSION['Login'] = $_POST['Login'];
+                        header('Location: /');
+                    }
+                    else{
+                        $this->SetMessage('Почта уже зарегестрированна');
+                    }
+                }
+                else{
+                    $this->SetMessage('Логин занят');
+                }
+            }
 
 
             //Отправка кода подтверждения и переход на страницу подтверждения
@@ -46,6 +98,12 @@ Class AccountController extends Controller{
     }
 
 
+    public function SettingsAction(){
+        $this->view->render();
+    }
+    public function SessionsAction(){
+        $this->view->render();
+    }
 
     private function DiscordAuth(){
         $discord = require $_SERVER['DOCUMENT_ROOT'].'/src/config/discord.php';
@@ -88,8 +146,8 @@ Class AccountController extends Controller{
             
             $response = json_decode(curl_exec($ch), true);
 
-            $_SESSION['Login'] = $response['username'].'#'.$response['discriminator'];
-            header('Location: /');
-            exit();
+            $_SESSION['Login'] = $response['username'];
+            return $_SESSION['Login'];
     }
+
 } 
