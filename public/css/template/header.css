@@ -2,6 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    
 }
 #root > .header > .logo{
     display: flex;
@@ -27,6 +29,7 @@
 #root > .header > .nav-bar {
     display: flex;
     flex-direction: row;
+    max-height: 40px;
 
 }
 
@@ -43,7 +46,7 @@
 }
 #root > .header > .nav-bar > .account > img{
     border-radius: 10px;
-    height: 42px
+    height: 40px
     
     
     
@@ -52,4 +55,8 @@
 #root > .header > .nav-bar > .account > .login{
     padding: 0 20px;
     
+}
+
+#root > .header > .nav-bar > .discord{
+    padding: 5px 10px;
 }

@@ -40,7 +40,11 @@
     font-weight: 500;
 }
 
-/* form */
+.notice{
+    border-radius: 10px;
+    border: 1px #3f3f4e solid;
+    padding: 20px 10px;
+}
 
 
 

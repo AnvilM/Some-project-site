@@ -9,7 +9,7 @@
         </div>
         <div class="footer">
             <a href="/" class="link forgot-password">Забыли пароль?</a>
-            <a href="/" class="link signup">Ещё нет аккаунта?</a>
+            <a href="/" class="link signup">Ещё нет аккаунта</a>
         </div>
         
     </form>

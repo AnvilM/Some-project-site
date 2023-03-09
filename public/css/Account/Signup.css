@@ -1,6 +1,8 @@
 .main-content > .content{
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
 }
 
 .form > .content > input{
@@ -8,8 +10,14 @@
 }
 
 
-
-
+.notice{
+    margin-top: 40px;
+    width: 330px;
+    
+}
+.notice > a{
+    display: inline;
+}
 
 
 
