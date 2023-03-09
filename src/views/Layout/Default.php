@@ -48,7 +48,7 @@
                     <div class="headline">Права</div>
                     <div class="content">
                         <div>Copyright © YUKKAMC 2022. Все права защищены. Сервера YUKKAMC не относятся к Mojang Studios.</div>
-                        <div>ИП БАРАНОВ КИРИЛЛ ВЛАДИМИРОВИЧ (ИНН 616611368049 ОРНИП 322619600023730)</div>
+                        <div>ИП ИВАНОВ ИВАН ИВАНОВИЧ (ИНН 123456789098 ОРНИП 123456789098765)</div>
                     </div>
                 </div>
                 <div class="papers">
