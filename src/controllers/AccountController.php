@@ -19,6 +19,10 @@ Class AccountController extends Controller{
                 $_SESSION['Login'] = mysqli_fetch_assoc($response)['Login'];
                 header('Location: /');
             }
+            else{
+                $this->SetMessage('Неверный логин или пароль');
+                header('Location: /Account/Login');
+            }
         }
         else{
             $this->view->render();
@@ -76,7 +80,7 @@ Class AccountController extends Controller{
                 exit();
             }
             
-            $code = rand(100000, 999999);
+            $code = rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9);
 
             $text = '
             <html>
@@ -101,7 +105,7 @@ Class AccountController extends Controller{
                         <div class="description">
                             <div class="content" style="width: calc; border-radius: 10px; border: 1px #3f3f4e solid; display: flex; padding: 10px 20px;">
                                 <div class="left" style="width: 45%;">
-                                    Если вы не регистрировались на нашем проекте, пожалуйста, проигнорируйте это письмо.
+                                    Если это письмо адресовано не вам, пожалуйста, проигнорируйте его.
                                 </div>
                                 <div class="right" style="width: 45%; margin-left: auto; margin-right: 0;">
                                     Не имея данный код, другие пользователи не смогут привязать вашу почту, к своему аккаунту.
@@ -138,9 +142,11 @@ Class AccountController extends Controller{
                 'Login' => $_POST['Login'],
                 'Password' => $_POST['Password'],
                 'Email' => $_POST['Email'],
-                'Code_hash' => $code_hash
+                'Code_hash' => $code_hash,
+                'Code' => $code
             ];
-
+            
+            $this->SetMessage('На вашу почту отправленно письмо');
             header('Location: /account/confirm');
                 
         }
@@ -175,13 +181,15 @@ Class AccountController extends Controller{
             $code_hash = str_replace($code_replace, $salt, $code_hash);
             $code_hash = str_replace('a', 'd', $code_hash);
 
-            if($_SESSION['Temp_signup']['Code_hash'] === $code_hash){
-                $this->model->AddUser($_SESSION['Temp_signup']['Login'], hash('sha256', $_SESSION['Temp_signup']['Password']), $_SESSION['Temp_signup']['Email'], time());
-                $_SESSION['Login'] = mysqli_fetch_assoc($this->model->getUser($_POST['Login'], hash('sha256', $_POST['Password'])));
+            if($_SESSION['Temp_Signup']['Code_hash'] === $code_hash){
+                $this->model->AddUser($_SESSION['Temp_Signup']['Login'], hash('sha256', $_SESSION['Temp_Signup']['Password']), $_SESSION['Temp_Signup']['Email'], time());
+                $_SESSION['Login'] = mysqli_fetch_assoc($this->model->getUser($_SESSION['Temp_Signup']['Login'], hash('sha256', $_SESSION['Temp_Signup']['Password'])))['Login'];
+                unset($_SESSION['Temp_Signup']);
                 header('Location: /');
             }
             else{
                 $this->SetMessage('Код неверный');
+                unset($_SESSION['Temp_Signup']);
                 header('Location: /');
             }
             
@@ -191,14 +199,116 @@ Class AccountController extends Controller{
             header('Location: /Account/Confirm');
         }
         else{
+            echo $_SESSION['Temp_Signup']['Code'];
             $this->view->render();
         }
 
     }
 
-    public function ResetAction(){
+    public function RecoveryAction(){
+        if(isset($_POST['Login'])){
+            $email = mysqli_fetch_assoc($this->model->getEmailFromLogin($_POST['Login']))['Email'];
+            $code = rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9);
+            $text = '
+            <html>
+                <body>
+                    <div class="message" style="background-color: #1B1B22; border-radius: 10px; width: 400px; color: #fff; padding: 10px 20px; font-size: 18px; font-weight: 400;">
+                        <div class="content">
+                            <div class="logo" style="display: flex; align-items: center;">
+                                <div class="icon" style="width: 30px; height: 30px; padding: 5px; border-radius: 10px; background-color: #5a5a5a4b;">
+                                    <img src="https://yukkamc.ru/public/icons/logo.svg" alt="." style="width: 30px; height: 30px;">
+                                </div>
+                                <div class="title" style="font-size: 29px; margin-left: 10px; font-weight: 500;">
+                                    YUKKA
+                                </div>
+                            </div>
+                            <div class="description" style="text-align: center; margin-top: 20px;">
+                                Для восстановления пароля<br>Нажмите кнопку
+                            </div>
+                            <div class="button" style="display: flex;">
+                                <a href="https://yukkamc.ru/Account/Reset?token='.$code.'" style="margin-left: auto; margin-right: auto; text-align: center; display: flex; align-items: center;  margin-top: 40px; margin-bottom: 40px; border-radius: 6px; padding: 5px 20px; height: 30px; background-color: #6563eec9; cursor: pointer; text-decoration: none; color: #fff; font-weight: 400;">
+                                    Восстановить
+                                </a>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <div class="content" style="width: calc; border-radius: 10px; border: 1px #3f3f4e solid; display: flex; padding: 10px 20px;">
+                                <div class="left" style="">
+                                    Если это письмо адресовано не вам, пожалуйста, проигнорируйте его.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>';
 
-        $this->view->render();
+            mail(
+                $email,
+                'Код подтверждения',
+                $text,
+                "From: MIME-Version: 1.0\r\n"
+                ."Content-type: text/html; charset=utf-8\r\n"
+                ."From: no-reply@yukkamc.ru\r\n"
+                ."To: ".$email."\r\n"
+                ."Cc: no-reply@yukkamc.ru\r\n"
+                ."Bcc: no-reply@yukkamc.ru\r\n"
+                ."X-Mailer: PHP/".phpversion()
+            );
+
+        
+            
+            $salt = 'ee1655cdc1';
+            $code_hash = hash('sha256', $code);
+            $code_replace = substr($code_hash, strlen($code_hash)/2 - 5, 10);
+            $code_hash = str_replace($code_replace, $salt, $code_hash);
+            $code_hash = str_replace('a', 'd', $code_hash);
+
+            $_SESSION['Temp_Recovery'] = [
+                'Email' => $email,
+                'code_hash' => $code_hash,
+                
+            ];
+
+            echo $_SESSION['Temp_Recovery']['code_hash'];
+            exit();
+            // $this->SetMessage('На вашу почту отправленно письмо');
+            // header('Location: /');
+
+        }
+        else if(isset($_GET['help'])){
+            $this->SetMessage('Проверьте папку спам');
+            header('Location: /Account/Recovery');
+        }
+        else{
+            $this->view->render();
+        }
+        
+        
+    }
+
+    public function ResetAction(){
+        
+        if(isset($_GET['token']) && $_SESSION['Temp_Recovery']['code_hash'] === $_GET['token']){
+            if(isset($_POST['Password']) && isset($_POST['Password_2'])){
+                if($_POST['Password'] === $_POST['Password_2']){
+                    $this->model->updatePasswordFromEmail(hash('sha256', $_POST['Password']), $_SESSION['Temp_Recovery']['Email']);
+                    $_SESSION['Login'] = mysqli_fetch_assoc($this->model->getUser($_SESSION['Temp_Recovery']['Email'], hash('sha256', $_POST['Password'])))['Login'];
+                    header('Location: /');
+                }
+                else{
+                    $this->SetMessage('Пароли не совпадают');
+                    header('Location: /Account/Reset?token='.$_GET['token']);
+                }
+            }
+            else{
+                $this->view->render();
+            }
+        }
+        else{
+            $this->SetMessage('Неверный токен');
+            unset($_SESSION['Temp_Recovery']);
+            header('Location: /');
+        }
         
     }
     

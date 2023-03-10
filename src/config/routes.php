@@ -67,6 +67,14 @@ $routes = [
         'Title' => 'Аккаунт'
     ],
     [
+        'Route' => 'Account/Recovery',
+        'Controller' => 'Account',
+        'Action' => 'Recovery',
+        'Layout' => 'Default',
+        'View' => 'Recovery',
+        'Title' => 'Аккаунт'
+    ],
+    [
         'Route' => 'Account/Reset',
         'Controller' => 'Account',
         'Action' => 'Reset',

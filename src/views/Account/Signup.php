@@ -9,7 +9,7 @@
             <button type="sybmit" class="button interactive-element">Продолжить</button>
         </div>
         <div class="footer">
-            <a href="/Account/Reset" class="link forgot-password">Забыли пароль?</a>
+            <a href="/Account/Recovery" class="link forgot-password">Забыли пароль?</a>
             <a href="/Account/Login" class="link signup">Уже есть аккаунт?</a>
         </div>
     </form>
