@@ -12,128 +12,198 @@ Class AccountController extends Controller{
         $this->view->render();
     }
     public function LoginAction(){
-
-        if(isset($_GET['code'])){
-            $DiscordLogin = $this->DiscordAuth();
-            
-            if(mysqli_num_rows($this->model->getLogin($DiscordLogin)) <= 0){
-                $this->model->AddUser($DiscordLogin, NULL, NULL, time());
-                $_SESSION['Login'] = $DiscordLogin;
-                header('Location: /');
-                exit();
-            }
-            else{
-                $this->SetMessage('Логин занят');
-                header('Location: /');
-                exit();
-            }
-            
-            
-        }
-
         if(isset($_POST['Login']) && isset($_POST['Password'])){
+            $response = $this->model->getUser($_POST['Login'], hash('sha256', $_POST['Password']));
+            if(mysqli_num_rows($response) >= 1){
 
-            if(mysqli_num_rows($this->model->getUser($_POST['Login'], hash('sha256', $_POST['Password']))) >= 1){
-                $_SESSION['Login'] = $_POST['Login'];
+                $_SESSION['Login'] = mysqli_fetch_assoc($response)['Login'];
                 header('Location: /');
-                exit();
             }
-            else{
-                $this->SetMessage('Неверный логин или пароль');
-            }
-
-
-        
         }
-        
-        $this->view->render();
+        else{
+            $this->view->render();
+        }
+
     }
 
-
     public function SignupAction(){
-        if(isset($_POST['Login']) && isset($_POST['Password']) && isset($_POST['Email']) && isset($_POST['Password_2'])){
-        
+        if(isset($_POST['Login']) && isset($_POST['Email']) && isset($_POST['Password']) && isset($_POST['Password_2'])){
             
-            if(strlen($_POST['Login']) >= 3 && strlen($_POST['Login']) <= 16 && mb_substr($_POST['Login'], 0, 0) != '-' && $_POST['Password'] == $_POST['Password_2'] && strlen($_POST['Password']) >= 8){
-                if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) < 1){
-                    if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) < 1){
-                        $this->model->AddUser($_POST['Login'], hash('sha256', $_POST['Password']), $_POST['Email'], time());
-                        $_SESSION['Login'] = $_POST['Login'];
-                        header('Location: /');
-                    }
-                    else{
-                        $this->SetMessage('Почта уже зарегестрированна');
-                    }
-                }
-                else{
-                    $this->SetMessage('Логин занят');
-                }
+            //LOGIN_VALIDATE
+            if (strlen($_POST['Login'])<3){
+                $this->SetMessage('Длина логина должна быть не менее 3 символов');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            else if (strlen($_POST['Login'])>16){
+                $this->SetMessage('Длина логина должна быть не более 16 символов');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            if(preg_match('/[^0-9A-Za-z]/', $_POST['Login']) == true){
+
+                $this->SetMessage('Логин может содержать только цифры и латинские буквы');
+                header('Location: /Account/Signup');
+                exit();
             }
 
+            //EMAIL_VALIDATE
+            if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)|| strlen($_POST['Email'])<=0){
+                $this->SetMessage('Некорректное значение Email');
+                header('Location: /Account/Signup');
+                exit();
+            }
 
-            //Отправка кода подтверждения и переход на страницу подтверждения
+            //PASSWORD_VALIDATE
+            if(strlen($_POST['Password']) <8){
+                $this->SetMessage('Длина пароля должна быть не менее 8 символов');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            if($_POST['Password'] !== $_POST['Password_2']){
+                $this->SetMessage('Пароли не совпадают');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            if(mysqli_num_rows($this->model->getLogin($_POST['Login'])) >= 1){
+                $this->SetMessage('Логин занят');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            if(mysqli_num_rows($this->model->getEmail($_POST['Email'])) >= 1){
+                $this->SetMessage('Почта занята');
+                header('Location: /Account/Signup');
+                exit();
+            }
+            
+            $code = rand(100000, 999999);
+
+            $text = '
+            <html>
+                <body>
+                    <div class="message" style="background-color: #1B1B22; border-radius: 10px; width: 400px; color: #fff; padding: 10px 20px; font-size: 18px; font-weight: 400;">
+                        <div class="content">
+                            <div class="logo" style="display: flex; align-items: center;">
+                                <div class="icon" style="width: 30px; height: 30px; padding: 5px; border-radius: 10px; background-color: #5a5a5a4b;">
+                                    <img src="https://yukkamc.ru/public/icons/logo.svg" alt="." style="width: 30px; height: 30px;">
+                                </div>
+                                <div class="title" style="font-size: 29px; margin-left: 10px; font-weight: 500;">
+                                    YUKKA
+                                </div>
+                            </div>
+                            <div class="description" style="text-align: center; margin-top: 20px;">
+                                Код подтверждения,<br>необходимый для регистрации.
+                            </div>
+                            <div class="code" style="font-size: 32px; text-align: center; font-weight: 500; margin: 40px 0">
+                                '.$code.'
+                            </div>
+                        </div>
+                        <div class="description">
+                            <div class="content" style="width: calc; border-radius: 10px; border: 1px #3f3f4e solid; display: flex; padding: 10px 20px;">
+                                <div class="left" style="width: 45%;">
+                                    Если вы не регистрировались на нашем проекте, пожалуйста, проигнорируйте это письмо.
+                                </div>
+                                <div class="right" style="width: 45%; margin-left: auto; margin-right: 0;">
+                                    Не имея данный код, другие пользователи не смогут привязать вашу почту, к своему аккаунту.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>';
+
+            mail(
+                $_POST['Email'],
+                'Код подтверждения',
+                $text,
+                "From: MIME-Version: 1.0\r\n"
+                ."Content-type: text/html; charset=utf-8\r\n"
+                ."From: no-reply@yukkamc.ru\r\n"
+                ."To: ".$_POST['Email']."\r\n"
+                ."Cc: no-reply@yukkamc.ru\r\n"
+                ."Bcc: no-reply@yukkamc.ru\r\n"
+                ."X-Mailer: PHP/".phpversion()
+            );
+
+        
+            
+            $salt = 'ee1655cdc1';
+            $code_hash = hash('sha256', $code);
+            $code_replace = substr($code_hash, strlen($code_hash)/2 - 5, 10);
+            $code_hash = str_replace($code_replace, $salt, $code_hash);
+            $code_hash = str_replace('a', 'd', $code_hash);
+            
+            
+            $_SESSION['Temp_Signup'] = [
+                'Login' => $_POST['Login'],
+                'Password' => $_POST['Password'],
+                'Email' => $_POST['Email'],
+                'Code_hash' => $code_hash
+            ];
+
+            header('Location: /account/confirm');
+                
         }
-
-        $this->view->render();
+        else{
+            $this->view->render();
+        }
+        
     }
 
     public function LogoutAction(){
         unset($_SESSION['Login']);
         header('Location: /');
-        exit();
     }
-
 
     public function SettingsAction(){
+
         $this->view->render();
     }
+
     public function SessionsAction(){
+
         $this->view->render();
     }
 
-    private function DiscordAuth(){
-        $discord = require $_SERVER['DOCUMENT_ROOT'].'/src/config/discord.php';
-            $data = [
-                'client_id' => $discord['client_id'],
-                'client_secret' => $discord['client_secret'],
-                'grant_type' => 'authorization_code',
-                'code' => $_GET['code'],
-                'redirect_uri' => $discord['redirect_uri'],
-                'scope' => 'identify%20guids',
-            ]; 
+    public function ConfirmAction(){
+    
+        if(isset($_POST['Code'])){
+            $code = $_POST['Code'];
+            $salt = 'ee1655cdc1';
+            $code_hash = hash('sha256', $code);
+            $code_replace = substr($code_hash, strlen($code_hash)/2 - 5, 10);
+            $code_hash = str_replace($code_replace, $salt, $code_hash);
+            $code_hash = str_replace('a', 'd', $code_hash);
 
-            $data_string = http_build_query($data);
-            $discord_token = 'https://discord.com/api/oauth2/token';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $discord_token);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if($_SESSION['Temp_signup']['Code_hash'] === $code_hash){
+                $this->model->AddUser($_SESSION['Temp_signup']['Login'], hash('sha256', $_SESSION['Temp_signup']['Password']), $_SESSION['Temp_signup']['Email'], time());
+                $_SESSION['Login'] = mysqli_fetch_assoc($this->model->getUser($_POST['Login'], hash('sha256', $_POST['Password'])));
+                header('Location: /');
+            }
+            else{
+                $this->SetMessage('Код неверный');
+                header('Location: /');
+            }
+            
+        }
+        else if(isset($_GET['help'])){
+            $this->SetMessage('Проверьте папку спам');
+            header('Location: /Account/Confirm');
+        }
+        else{
+            $this->view->render();
+        }
 
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            
-            $response = json_decode(curl_exec($ch), true);
-            
-            
-
-            $access_token = $response['access_token'];
-            $discord_users_uri = "https://discord.com/api/users/@me";
-            $header = array("Authorization: Bearer $access_token", "Content-type: application/x-www-form-urlencoded");
-            
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-            curl_setopt($ch, CURLOPT_URL, $discord_users_uri);
-            curl_setopt($ch, CURLOPT_POST, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-            
-            $response = json_decode(curl_exec($ch), true);
-
-        
-            return $response['username'];
     }
+
+    public function ResetAction(){
+
+        $this->view->render();
+        
+    }
+    
+
+
+   
 
 } 

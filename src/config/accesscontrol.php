@@ -8,6 +8,8 @@ return [
     'noLogined' => [
         'Account/Signup',
         'Account/Login',
+        'Account/Confirm',
+        'Account/Reset',
         
     ],
     'isLogined' => [

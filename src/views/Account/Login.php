@@ -2,7 +2,7 @@
     <form action="" class="form" method="POST">
         <div class="title">Вход</div>
         <div class="content">
-            <input type="text" class="login" placeholder="Логин" name="Login" required maxlength="16" minlength="3">
+            <input type="text" class="login" placeholder="Логин" name="Login" required>
             <input class="password" type="password" placeholder="Пароль" name="Password" required>
 
             <button type="sybmit" class="button interactive-element">Продолжить</button>
