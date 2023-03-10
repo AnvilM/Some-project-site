@@ -19,6 +19,13 @@ class AccountModel extends Model{
         return $this->db->query("SELECT * FROM `user_data` WHERE `Email` = '$Email'");
     }
 
+    public function getEmailFromLogin($Login){
+        return $this->db->query("SELECT * FROM `user_data` WHERE `Login` = '$Login' OR `Email` = '$Login'");
+    }
+
+    public function updatePasswordFromEmail($Password, $Email){
+        return $this->db->query("UPDATE `user_data` SET `Password` = '$Password' WHERE `Email` = '$Email'");
+    }
     public function AddUser($Login, $Password, $Email, $Date){
         $this->db->query("INSERT INTO `user_data` (`Login`, `Password`, `Email`, `Date`) VALUES ('$Login', '$Password', '$Email', '$Date')");
         

@@ -101,7 +101,7 @@ return[
             
         ]
     ],
-    'Account/Reset' => [
+    'Account/Recovery' => [
         'all' => [
             
         ],

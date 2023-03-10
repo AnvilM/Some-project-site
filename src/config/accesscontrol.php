@@ -9,6 +9,7 @@ return [
         'Account/Signup',
         'Account/Login',
         'Account/Confirm',
+        'Account/Recovery',
         'Account/Reset',
         
     ],
