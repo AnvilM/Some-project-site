@@ -143,8 +143,7 @@ Class AccountController extends Controller{
                 'Login' => $_POST['Login'],
                 'Password' => $_POST['Password'],
                 'Email' => $_POST['Email'],
-                'Code_hash' => $code_hash,
-                'Code' => $code
+                'Code_hash' => $code_hash
             ];
             
             $this->SetMessage('На вашу почту отправленно письмо');
@@ -201,7 +200,7 @@ Class AccountController extends Controller{
             header('Location: /Account/Confirm');
         }
         else{
-            echo $_SESSION['Temp_Signup']['Code'];
+            
             $this->view->render();
         }
 
