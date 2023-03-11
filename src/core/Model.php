@@ -11,4 +11,8 @@ abstract class Model{
         $this->db = new Db;
         
     }
+
+    public function updateSession($Date, $Login, $SessionId,){
+        $this->db->query("UPDATE `session` SET `LastActive` = '$Date' WHERE `Login` = '$Login' AND `SessionId` = '$SessionId'");
+    }
 }

@@ -31,6 +31,13 @@ class AccountModel extends Model{
         
     }
 
+    public function addSession($Login, $SessionId, $Ip, $Location, $Os, $Date){
+        $this->db->query("INSERT INTO `session` (`Login`, `SessionId`, `Ip`, `Location`, `Os`, `CreateDate`, `LastActive`) VALUES ('$Login', '$SessionId', '$Ip', '$Location', '$Os', '$Date', '$Date')");
+    }
+    
+
+
+
     // public function AddUser($Login, $Password, $Email, $Date){
     //     $this->db->query("INSERT INTO `user_data` (`Login`, `Password`, `Email`, `Date`) VALUES ('$Login', '$Password', '$Email', '$Date')");
         
