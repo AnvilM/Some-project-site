@@ -17,7 +17,7 @@ Class AccountController extends Controller{
             if(mysqli_num_rows($response) >= 1){
 
                 $_SESSION['Login'] = mysqli_fetch_assoc($response)['Login'];
-                $this->model->addSession($_SESSION['Login'], session_id(), '128.256.43.84', 'Moscow', 'Windeows', time());
+                $this->model->addSession($_SESSION['Login'], session_id(), '128.256.43.84', 'Moscow', 'Windeows', 'Chrome', time());
                 header('Location: /');
             }
             else{
@@ -143,7 +143,8 @@ Class AccountController extends Controller{
                 'Login' => $_POST['Login'],
                 'Password' => $_POST['Password'],
                 'Email' => $_POST['Email'],
-                'Code_hash' => $code_hash
+                'Code_hash' => $code_hash,
+                'Code' => $code
             ];
             
             $this->SetMessage('На вашу почту отправленно письмо');
@@ -157,19 +158,11 @@ Class AccountController extends Controller{
     }
 
     public function LogoutAction(){
+        $this->model->delSession($_SESSION['Login'], session_id());
         unset($_SESSION['Login']);
         header('Location: /');
     }
 
-    public function SettingsAction(){
-
-        $this->view->render();
-    }
-
-    public function SessionsAction(){
-
-        $this->view->render();
-    }
 
     public function ConfirmAction(){
     
@@ -184,7 +177,7 @@ Class AccountController extends Controller{
             if($_SESSION['Temp_Signup']['Code_hash'] === $code_hash){
                 $this->model->AddUser($_SESSION['Temp_Signup']['Login'], hash('sha256', $_SESSION['Temp_Signup']['Password']), $_SESSION['Temp_Signup']['Email'], time());
                 $_SESSION['Login'] = mysqli_fetch_assoc($this->model->getUser($_SESSION['Temp_Signup']['Login'], hash('sha256', $_SESSION['Temp_Signup']['Password'])))['Login'];
-                $this->model->addSession($_SESSION['Login'], session_id(), '128.256.43.84', 'Moscow', 'Windeows', time());
+                $this->model->addSession($_SESSION['Login'], session_id(), '128.256.43.84', 'Moscow', 'Windeows', 'Chrome', time());
                 unset($_SESSION['Temp_Signup']);
                 header('Location: /');
             }
@@ -200,7 +193,7 @@ Class AccountController extends Controller{
             header('Location: /Account/Confirm');
         }
         else{
-            
+            echo $_SESSION['Temp_Signup']['Code'];
             $this->view->render();
         }
 
@@ -310,6 +303,21 @@ Class AccountController extends Controller{
             header('Location: /');
         }
         
+    }
+
+
+    public function SettingsAction(){
+
+        $this->view->render();
+    }
+
+    public function SessionsAction(){
+        
+        
+
+        $Sessions = $this->model->getSession($_SESSION['Login'], session_id());
+        
+        $this->view->render([mysqli_fetch_all($Sessions[0]), mysqli_fetch_all($Sessions[1])]);
     }
     
 

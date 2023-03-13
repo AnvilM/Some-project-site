@@ -31,10 +31,18 @@ class AccountModel extends Model{
         
     }
 
-    public function addSession($Login, $SessionId, $Ip, $Location, $Os, $Date){
-        $this->db->query("INSERT INTO `session` (`Login`, `SessionId`, `Ip`, `Location`, `Os`, `CreateDate`, `LastActive`) VALUES ('$Login', '$SessionId', '$Ip', '$Location', '$Os', '$Date', '$Date')");
+    public function addSession($Login, $SessionId, $Ip, $Location, $Os, $Browser,  $Date){
+        $this->db->query("INSERT INTO `session` (`Login`, `SessionId`, `Ip`, `Location`, `Os`, `Browser`, `CreateDate`, `LastActive`) VALUES ('$Login', '$SessionId', '$Ip', '$Location', '$Os', '$Browser', '$Date', '$Date')");
     }
-    
+    public function getSession($Login, $SessionId){
+        $arr[0] =  $this->db->query("SELECT * FROM `session` WHERE `Login` = '$Login' AND `SessionId` != '$SessionId'");
+        $arr[1] =  $this->db->query("SELECT * FROM `session` WHERE `Login` = '$Login' AND `SessionId` = '$SessionId'");
+        return $arr;
+    }
+
+    public function delSession($Login, $SessionId){
+        return $this->db->query("DELETE FROM `session` WHERE `Login` = '$Login' AND `SessionId` = '$SessionId'");
+    }
 
 
 

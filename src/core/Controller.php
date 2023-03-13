@@ -23,6 +23,7 @@ abstract class Controller{
         
         $this->model = $this->loadModel($params['Controller']);
 
+        
         if(isset($_SESSION['Login'])){
             $this->model->updateSession(time(), $_SESSION['Login'], session_id());
         }
